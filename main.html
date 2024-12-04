@@ -4,114 +4,74 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Book List</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body {
-            font-family: Arial, sans-serif;
             padding: 20px;
-        }
-        .container {
-            max-width: 800px;
-            margin: auto;
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        .delete {
-            color: red;
-            cursor: pointer;
-        }
-        H1 {
-            text-align: center;
-            margin-bottom: 20px;
         }
     </style>
 </head>
 <body>
-        <H1>My Book List</H1>
 
-    <div class="container">
-        
-        <!-- Form to input book data -->
-        <div class="form-group">
-            <label for="title">Title:</label>
-            <input type="text" class="form-control" id="title" placeholder="Enter book title">
-        </div>
-        
-        <div class="form-group">
-            <label for="author">Author:</label>
-            <input type="text" class="form-control" id="author" placeholder="Enter author's name">
-        </div>
-        
-        <div class="form-group">
-            <label for="isbn">ISBN:</label>
-            <input type="text" class="form-control" id="isbn" placeholder="Enter ISBN number">
-        </div>
-        
-        <button id="submit" class="btn btn-primary">Add Book</button>
+    <h1>MyBookList</h1>
 
-        <table class="table table-striped mt-4">
-            <thead>
-                <tr>
-                    <th>Title</th>
-                    <th>Author</th>
-                    <th>ISBN#</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody id="book-list">
-                <!-- Dynamic book rows will be added here -->
-            </tbody>
-        </table>
+    <div class="form-group">
+        <label for="title">Title:</label>
+        <input type="text" id="title" class="form-control" required>
+        
+        <label for="author">Author:</label>
+        <input type="text" id="author" class="form-control" required>
+        
+        <label for="isbn">ISBN#:</label>
+        <input type="text" id="isbn" class="form-control" required>
+        
+        <button id="submit" class="btn btn-primary mt-2">Add Book</button>
     </div>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Author</th>
+                <th>ISBN#</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="book-list">
+            <!-- Book entries will be added here -->
+        </tbody>
+    </table>
 
     <script>
         document.getElementById('submit').addEventListener('click', function() {
-            // Get user input values
             const title = document.getElementById('title').value;
             const author = document.getElementById('author').value;
             const isbn = document.getElementById('isbn').value;
 
-            // Check if all fields are filled
             if (title && author && isbn) {
-                // Create a new row for the table
-                const row = document.createElement('tr');
+                const tableBody = document.getElementById('book-list');
+                const newRow = document.createElement('tr');
 
-                // Create cells for each book detail
-                const titleCell = document.createElement('td');
-                titleCell.textContent = title;
-                row.appendChild(titleCell);
+                newRow.innerHTML = `
+                    <td>${title}</td>
+                    <td>${author}</td>
+                    <td>${isbn}</td>
+                    <td><button class="delete btn btn-danger">Clear</button></td>
+                `;
 
-                const authorCell = document.createElement('td');
-                authorCell.textContent = author;
-                row.appendChild(authorCell);
+                tableBody.appendChild(newRow);
 
-                const isbnCell = document.createElement('td');
-                isbnCell.textContent = isbn;
-                row.appendChild(isbnCell);
-
-                // Create the delete button
-                const deleteCell = document.createElement('td');
-                const deleteBtn = document.createElement('button');
-                deleteBtn.textContent = 'Clear';
-                deleteBtn.classList.add('delete', 'btn', 'btn-danger');
-                deleteCell.appendChild(deleteBtn);
-                row.appendChild(deleteCell);
-
-                // Append the new row to the table
-                document.getElementById('book-list').appendChild(row);
-
-                // Clear the input fields after submission
+                // Clear input fields
                 document.getElementById('title').value = '';
                 document.getElementById('author').value = '';
                 document.getElementById('isbn').value = '';
 
                 // Add event listener to the delete button
-                deleteBtn.addEventListener('click', function() {
-                    row.remove();
+                newRow.querySelector('.delete').addEventListener('click', function() {
+                    tableBody.removeChild(newRow);
                 });
             } else {
-                alert('Please fill out all fields.');
+                alert('Please fill in all fields.');
             }
         });
     </script>
